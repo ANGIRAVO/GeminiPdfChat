@@ -279,18 +279,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(500).json({ message: "Gemini API key is not configured" });
       }
       
-      // Call the Gemini API (using node-fetch)
-      const response = await fetch('https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=' + apiKey, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          contents: [
-            {
-              parts: [
-                {
-                  text: `You are a helpful assistant that answers questions about PDF documents.
+      // Import Google Generative AI library
+      const { GoogleGenerativeAI } = require("@google/generative-ai");
+      
+      try {
+        // Initialize the Gemini API client
+        const genAI = new GoogleGenerativeAI(apiKey);
+        const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+        
+        // Prepare the prompt with context
+        const prompt = `You are a helpful assistant that answers questions about PDF documents.
                   
 PDF CONTENT:
 ${pdfContent}
@@ -298,36 +296,26 @@ ${pdfContent}
 USER QUESTION:
 ${message}
 
-Please provide a detailed, accurate, and helpful response based on the PDF content above.`
-                }
-              ]
-            }
-          ],
-          generationConfig: {
-            temperature: 0.7,
-            maxOutputTokens: 2048,
-          }
-        })
-      });
-      
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Gemini API error:', errorData);
-        return res.status(response.status).json({ 
-          message: "Failed to get response from Gemini API",
-          error: errorData
+Please provide a detailed, accurate, and helpful response based on the PDF content above.`;
+        
+        // Generate content using the Gemini API
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        const aiResponse = response.text();
+        
+        // Return the AI response
+        res.status(200).json({
+          response: aiResponse
+        });
+      } catch (genError) {
+        console.error('Gemini API error:', genError);
+        return res.status(404).json({ 
+          message: "Failed to get response from Gemini API. Please make sure your API key is correct and try again."
         });
       }
-      
-      const data = await response.json();
-      const aiResponse = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't generate a response.";
-      
-      res.status(200).json({
-        response: aiResponse
-      });
     } catch (error) {
-      console.error('Gemini API error:', error);
-      res.status(500).json({ message: "Failed to get Gemini response" });
+      console.error('Error processing request:', error);
+      res.status(500).json({ message: "Failed to process your request" });
     }
   });
 
