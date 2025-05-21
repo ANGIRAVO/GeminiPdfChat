@@ -139,6 +139,6 @@ export class MemStorage implements IStorage {
   }
 }
 
-// For now, let's use the in-memory storage to ensure the application works
-// We can switch to a database later when we have the connection issues resolved
+// Use in-memory storage for reliable operation
+// We can switch to a database later once connection issues are resolved
 export const storage = new MemStorage();
