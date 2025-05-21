@@ -69,3 +69,7 @@ Go to Google AI Studio
 Sign in with your Google account
 
 Create or copy your existing API key
+📸 Screenshots
+Add screenshots or GIFs here of:
+![Screenshot 2025-05-21 180008](https://github.com/user-attachments/assets/6d2d07bb-25ec-4b89-b1e7-3656d70aa826)
+
