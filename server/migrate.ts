@@ -1,5 +1,5 @@
-import { migrate } from "drizzle-orm/postgres-js/migrator";
-import { db } from "./db";
+import { migrate } from "drizzle-orm/neon-http/migrator";
+import { db } from "./db-neon";
 
 // This script runs database migrations to ensure the database schema is up to date
 async function main() {
