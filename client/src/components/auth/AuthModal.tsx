@@ -17,7 +17,10 @@ export function AuthModal({ isOpen, onSuccess }: AuthModalProps) {
 
   return (
     <Dialog open={isOpen}>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="sm:max-w-lg" aria-describedby="auth-description">
+        <div id="auth-description" className="sr-only">
+          Authentication form for the PDF Chatbot application. Sign in or register to continue.
+        </div>
         {isLoginView ? (
           <LoginForm onSuccess={onSuccess} onToggleView={toggleView} />
         ) : (

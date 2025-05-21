@@ -133,11 +133,6 @@ export class MemStorage implements IStorage {
   }
 }
 
-// Import PostgreSQL storage implementation
-import { PostgresStorage } from "./db-storage";
-
-// Create a storage instance based on environment
-// If DATABASE_URL is present, use PostgreSQL storage, otherwise fall back to memory storage
-export const storage = process.env.DATABASE_URL 
-  ? new PostgresStorage() 
-  : new MemStorage();
+// For now, let's use the in-memory storage to ensure the application works
+// We can switch to a database later when we have the connection issues resolved
+export const storage = new MemStorage();
