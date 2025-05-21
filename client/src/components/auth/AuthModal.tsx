@@ -17,10 +17,15 @@ export function AuthModal({ isOpen, onSuccess }: AuthModalProps) {
 
   return (
     <Dialog open={isOpen}>
-      <DialogContent className="sm:max-w-lg" aria-describedby="auth-description">
-        <div id="auth-description" className="sr-only">
-          Authentication form for the PDF Chatbot application. Sign in or register to continue.
-        </div>
+      <DialogContent className="sm:max-w-lg">
+        <h2 className="text-lg font-semibold mb-4">
+          {isLoginView ? "Sign In" : "Create an Account"}
+        </h2>
+        <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">
+          {isLoginView 
+            ? "Sign in to your account to continue" 
+            : "Create a new account to get started"}
+        </p>
         {isLoginView ? (
           <LoginForm onSuccess={onSuccess} onToggleView={toggleView} />
         ) : (
